@@ -4,7 +4,6 @@ Star Wars - Space Invaders: ToDo list
 
 
 - Bugs
-    - Mouse stays pressed in while in menu
     - Leaving causes error on other machines
     - Healthbar stays green after death
 
