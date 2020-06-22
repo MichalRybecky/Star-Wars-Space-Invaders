@@ -61,7 +61,7 @@ Dev Notes
         - slow blaster speed
 
     - Sniper
-        -
+        - Y-Wing
         - medium player speed
         - slow blaster cooldown
         - fast blaster speed

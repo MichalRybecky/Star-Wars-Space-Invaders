@@ -24,7 +24,7 @@ CIS_STRIKE_BOMBER = pygame.image.load(
 
 # Player ships
 ARC_170 = pygame.image.load(
-    os.path.join("assets", "arc_170.png"))
+    os.path.join("assets", "arc_170_new.png"))
 LAAT = pygame.image.load(
     os.path.join("assets", "laat.png"))
 Y_WING = pygame.image.load(
@@ -500,9 +500,15 @@ def main_menu():
             (WIDTH / 2) - 130, (HEIGHT / 2), 260, 50)
         button_leave = pygame.Rect(
             (WIDTH / 2) - 130, (HEIGHT / 2) + 80, 260, 50)
+        button_sfx = pygame.Rect(
+            (WIDTH) - 150, 20, 50, 50)
+        button_music = pygame.Rect(
+            (WIDTH) - 80, 20, 50, 50)
         pygame.draw.rect(WIN, (204, 204, 204), button_new_game)
         pygame.draw.rect(WIN, (204, 204, 204), button_leave)
         pygame.draw.rect(WIN, (204, 204, 204), button_change_ship)
+        pygame.draw.rect(WIN, (204, 204, 204), button_sfx)
+        pygame.draw.rect(WIN, (204, 204, 204), button_music)
 
         # Menu labels
         label_new_game = main_font.render("New Game", 1, (0, 47, 125))
