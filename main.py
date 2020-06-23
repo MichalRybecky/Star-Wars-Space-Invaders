@@ -24,7 +24,8 @@ CIS_STRIKE_BOMBER = pygame.image.load(
 
 # Player ships
 ARC_170 = pygame.image.load(
-    os.path.join("assets", "arc_170_new.png"))
+    os.path.join("assets", "arc_170.png"))
+ARC_170 = pygame.transform.scale(ARC_170, (150, 150))
 LAAT = pygame.image.load(
     os.path.join("assets", "laat.png"))
 Y_WING = pygame.image.load(
@@ -203,10 +204,10 @@ class Player(Ship):
         if self.cool_down_counter == 0:
 
             if self.ship_class == "classic":
-                laser = Laser(self.x + 2, self.y, self.laser_img)
+                laser = Laser(self.x + 4, self.y + 30, self.laser_img)
                 self.lasers.append(laser)
                 laser = Laser(self.x + self.ship_img.get_width() -
-                              8, self.y, self.laser_img)
+                              11, self.y + 30, self.laser_img)
                 self.lasers.append(laser)
 
             elif self.ship_class == "heavy":
