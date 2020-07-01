@@ -11,7 +11,7 @@ Star Wars - Space Invaders: ToDo list
 - Sounds
     - Multiple music files
     - Authentic blaster SFX
-    - Add enemy_exlplode
+    - Add enemy_explode
     - Player explode SFX
 
 
@@ -24,7 +24,7 @@ Star Wars - Space Invaders: ToDo list
 
 - Extras
     - Health
-    - Power Up
+    - Strenght
         - Faster blaster speed
         - Bigger blaster size
         - Enemy freeze

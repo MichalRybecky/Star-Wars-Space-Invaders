@@ -269,6 +269,16 @@ class Enemy(Ship):
         return self.y
 
 
+def music():
+    if switch == True:
+        pygame.mixer.music.set_volume(0.7)
+        pygame.mixer.music.play(-1)
+        switch = False
+    else:
+        pygame.mixer.music.stop()
+        switch = True
+
+
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
     offset_y = obj2.y - obj1.y
@@ -287,6 +297,7 @@ def ship_type(ship_class):
 
 
 def main(p_v, p_l_v, ship_class):
+    player_sfx_played = False
     run = True
     FPS = 60
     wave = 0
@@ -365,6 +376,11 @@ def main(p_v, p_l_v, ship_class):
         if lives <= 0 or player.health < 0:
             lost = True
             lost_count += 1
+            if player.health < 0 and player_sfx_played == False:
+                SFX_PLAYER_DESTROYED.set_volume(1)
+                SFX_PLAYER_DESTROYED.play()
+                player_sfx_played = True
+
 
         if lost:
             if lost_count > FPS * 3:
@@ -521,6 +537,13 @@ def main_menu():
         label_change_ship = main_font.render("Change Ship", 1, (0, 47, 125))
         WIN.blit(label_change_ship, (398, 375))
 
+        label_sfx = main_font.render("S", 1, (0, 47, 125))
+        WIN.blit(label_sfx, ((WIDTH / 2) + 360, 18))
+
+        label_music = main_font.render("M", 1, (0, 47, 125))
+        WIN.blit(label_music, ((WIDTH / 2) + 430, 18))
+
+        # Button activations
         if button_new_game.collidepoint((pos_x, pos_y)):
             if click:
                 ship_type("classic")
@@ -530,6 +553,9 @@ def main_menu():
         if button_change_ship.collidepoint((pos_x, pos_y)):
             if click:
                 change_ship_menu()
+        if button_music.collidepoint((pos_x, pos_y)):
+            if click:
+                music()
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -599,7 +625,5 @@ def change_ship_menu():
 
     pygame.quit()
 
-
-pygame.mixer.music.set_volume(0.7)
-pygame.mixer.music.play(-1)
+music()
 main_menu()
