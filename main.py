@@ -9,12 +9,19 @@ import time
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 
-# PyGame setup
+# PyGame Setup
 WIDTH, HEIGHT = 1000, 750
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Star Wars - Space Invaders")
 
-# Loading ship images
+# Loading Icons
+MUSIC_ON = pygame.image.load(os.path.join("assets", "music_on.png"))
+MUSIC_ON = pygame.transform.scale(MUSIC_ON, (40, 40))
+MUSIC_OFF = pygame.image.load(os.path.join("assets", "music_off.png"))
+MUSIC_OFF = pygame.transform.scale(MUSIC_OFF, (40, 40))
+
+
+# Loading Ship Images
 CIS_FIGHTER = pygame.image.load(
     os.path.join("assets", "cis_fighter.png"))
 CIS_HYENA_BOMBER = pygame.image.load(
@@ -22,7 +29,7 @@ CIS_HYENA_BOMBER = pygame.image.load(
 CIS_STRIKE_BOMBER = pygame.image.load(
     os.path.join("assets", "cis_strike_bomber.png"))
 
-# Player ships
+# Player Ships
 ARC_170 = pygame.image.load(
     os.path.join("assets", "arc_170.png"))
 ARC_170 = pygame.transform.scale(ARC_170, (150, 150))
@@ -537,7 +544,7 @@ def main_menu():
         pygame.draw.rect(WIN, (204, 204, 204), button_sfx)
         pygame.draw.rect(WIN, (204, 204, 204), button_music)
 
-        # Menu labels
+        # Menu Labels
         label_new_game = main_font.render("New Game", 1, (0, 47, 125))
         WIN.blit(label_new_game, (417, 295))
 
@@ -550,10 +557,13 @@ def main_menu():
         label_sfx = main_font.render("S", 1, (0, 47, 125))
         WIN.blit(label_sfx, ((WIDTH / 2) + 360, 18))
 
-        label_music = main_font.render("M", 1, (0, 47, 125))
-        WIN.blit(label_music, ((WIDTH / 2) + 430, 18))
+        # Menu Icons
+        if music_playing == True:
+            WIN.blit(MUSIC_ON, ((WIDTH / 2) + 425, 25))
+        else:
+            WIN.blit(MUSIC_OFF, ((WIDTH / 2) + 425, 25))
 
-        # Button activations
+        # Button Activations
         if button_new_game.collidepoint((pos_x, pos_y)):
             if click:
                 ship_type("classic")
@@ -643,6 +653,10 @@ def change_ship_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    click == False
 
     pygame.quit()
 
