@@ -6,37 +6,28 @@ Star Wars - Space Invaders: ToDo list
 - Bugs
     - Leaving causes error on other machines
     - Healthbar stays green after death
-    - Mouse button down lasts long, it needs to be just one click
 
 
 - Sounds
     - Multiple music files
     - Authentic blaster SFX
     - Add enemy_explode
-    - Player explode SFX
 
 
 - Menu
     - Change team
-    - Sounds
-        - Music ON/OFF
-        - SFX ON/OFF
 
 
 - Extras
-    - Health
-    - Strenght
-        - Faster blaster speed
-        - Bigger blaster size
-        - Enemy freeze
-            - only when more than x enemies on screen
+    - Bullet belt
+        - lower reload speed
+    - Slime
+        - slow enemies
 
     - make them dissapear after x seconds when not picked up
 
 - Skins
-    - CIS Strike Bomber skin remake
-    - LAAT skin
-    - Y-Wing skin
+    - all skins proper remake
 
 
 - Change Team
@@ -45,30 +36,3 @@ Star Wars - Space Invaders: ToDo list
     - play as Rebellion (against Empire)
 
 
-=========
-Dev Notes
-=========
-
-- Classes
-    - Classic
-        - medium player speed
-        - medium blaster cooldown
-        - medium blaster speed
-
-    - Heavy
-        - LAAT
-        - slow player speed
-        - fast blaster cooldown
-        - slow blaster speed
-
-    - Sniper
-        - Y-Wing
-        - medium player speed
-        - slow blaster cooldown
-        - fast blaster speed
-
-    - Scout
-        - Eta-2 Actiss-class light interceptor
-        - fast player speed
-        - medium blaster cooldown
-        - medium blaster speed

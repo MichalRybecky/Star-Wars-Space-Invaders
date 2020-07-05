@@ -14,63 +14,61 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Star Wars - Space Invaders")
 
 # Loading Icons
-MUSIC_ON = pygame.image.load(os.path.join("assets", "music_on.png"))
+MUSIC_ON = pygame.image.load(os.path.join("assets/menu_icons", "music_on.png"))
 MUSIC_ON = pygame.transform.scale(MUSIC_ON, (40, 40))
-MUSIC_OFF = pygame.image.load(os.path.join("assets", "music_off.png"))
+MUSIC_OFF = pygame.image.load(os.path.join("assets/menu_icons", "music_off.png"))
 MUSIC_OFF = pygame.transform.scale(MUSIC_OFF, (40, 40))
 
-SFX_ON = pygame.image.load(os.path.join("assets", "sfx_on.png"))
+SFX_ON = pygame.image.load(os.path.join("assets/menu_icons", "sfx_on.png"))
 SFX_ON = pygame.transform.scale(SFX_ON, (50, 50))
-SFX_OFF = pygame.image.load(os.path.join("assets", "sfx_off.png"))
+SFX_OFF = pygame.image.load(os.path.join("assets/menu_icons", "sfx_off.png"))
 SFX_OFF = pygame.transform.scale(SFX_OFF, (50, 50))
 
 # Loading Ship Images
 CIS_FIGHTER = pygame.image.load(
-    os.path.join("assets", "cis_fighter.png"))
+    os.path.join("assets/skins", "cis_fighter.png"))
 CIS_HYENA_BOMBER = pygame.image.load(
-    os.path.join("assets", "cis_hyena_bomber.png"))
+    os.path.join("assets/skins", "cis_hyena_bomber.png"))
 CIS_STRIKE_BOMBER = pygame.image.load(
-    os.path.join("assets", "cis_strike_bomber.png"))
+    os.path.join("assets/skins", "cis_strike_bomber.png"))
 
 # Player Ships
 ARC_170 = pygame.image.load(
-    os.path.join("assets", "arc_170.png"))
+    os.path.join("assets/skins", "arc_170.png"))
 ARC_170 = pygame.transform.scale(ARC_170, (150, 150))
 LAAT = pygame.image.load(
-    os.path.join("assets", "laat.png"))
+    os.path.join("assets/skins", "laat.png"))
 Y_WING = pygame.image.load(
-    os.path.join("assets", "y_wing.png"))
+    os.path.join("assets/skins", "y_wing.png"))
 JEDI_INTERCEPTOR = pygame.image.load(
-    os.path.join("assets", "jedi_interceptor.png"))
+    os.path.join("assets/skins", "jedi_interceptor.png"))
 
 # Lasers
 LASER_RED_SMALL = pygame.image.load(
-    os.path.join("assets", "laser_red_small.png"))
+    os.path.join("assets/lasers", "laser_red_small.png"))
 LASER_RED_MED = pygame.image.load(
-    os.path.join("assets", "laser_red_med.png"))
+    os.path.join("assets/lasers", "laser_red_med.png"))
 LASER_BLUE_MED = pygame.image.load(
-    os.path.join("assets", "laser_blue_med.png"))
+    os.path.join("assets/lasers", "laser_blue_med.png"))
 
 # Background
 BG = pygame.transform.scale(pygame.image.load(
     os.path.join("assets", "background-black.png")), (WIDTH, HEIGHT))
 
 # Power Ups
-SPEED_PU = pygame.image.load(os.path.join("assets", "speed_pu.png"))
-HEALTH_PU = pygame.image.load(os.path.join("assets", "health_pu.png"))
+SPEED_PU = pygame.image.load(os.path.join("assets/power_ups", "speed_pu.png"))
+HEALTH_PU = pygame.image.load(os.path.join("assets/power_ups", "health_pu.png"))
 LASER_SPEED_PU = pygame.image.load(
-    os.path.join("assets", "laser_speed_pu.png"))
+    os.path.join("assets/power_ups", "laser_speed_pu.png"))
 ENEMY_FREEZE_PU = pygame.image.load(
-    os.path.join("assets", "enemy_freeze_pu.png"))
+    os.path.join("assets/power_ups", "enemy_freeze_pu.png"))
 
-# Music and SFX
-MUSIC_FORCE_THEME = pygame.mixer.music.load(
-    os.path.join("assets", "force_theme.mp3"))
-SFX_EXPLOSION_1 = pygame.mixer.Sound(os.path.join("assets", "explosion_1.wav"))
-SFX_PLAYER_FIRE = pygame.mixer.Sound(os.path.join("assets", "player_fire.wav"))
-SFX_ENEMY_FIRE = pygame.mixer.Sound(os.path.join("assets", "enemy_fire.wav"))
+# SFX
+SFX_EXPLOSION_1 = pygame.mixer.Sound(os.path.join("assets/sfx", "explosion_1.wav"))
+SFX_PLAYER_FIRE = pygame.mixer.Sound(os.path.join("assets/sfx", "player_fire.wav"))
+SFX_ENEMY_FIRE = pygame.mixer.Sound(os.path.join("assets/sfx", "enemy_fire.wav"))
 SFX_PLAYER_DESTROYED = pygame.mixer.Sound(
-    os.path.join("assets", "player_explode.wav"))
+    os.path.join("assets/sfx", "player_explode.wav"))
 
 
 class Laser:
@@ -283,7 +281,23 @@ class Enemy(Ship):
 
 
 def music_on():
-    pygame.mixer.music.set_volume(0.7)
+    rng = random.randrange(4)
+    if rng == 0:
+        FORCE_THEME = pygame.mixer.music.load(os.path.join("assets/music", "force_theme.mp3"))
+        pygame.mixer.music.set_volume(1)
+    elif rng == 1:
+        ANAKINS_BETRAYAL = pygame.mixer.music.load(os.path.join("assets/music", "anakins_betrayal.mp3"))
+        pygame.mixer.music.set_volume(1)
+    elif rng == 2:
+        BATTLE_OF_THE_HEROES = pygame.mixer.music.load(os.path.join("assets/music", "battle_of_the_heroes.mp3"))
+        pygame.mixer.music.set_volume(5)
+    elif rng == 3:
+        DUEL_OF_THE_FATES = pygame.mixer.music.load(os.path.join("assets/music", "duel_of_the_fates.mp3"))
+        pygame.mixer.music.set_volume(0.6)
+    else:
+        JEDI_TEMPLE_MARCH = pygame.mixer.music.load(os.path.join("assets/music", "jedi_temple_march.mp3"))
+        pygame.mixer.music.set_volume(1)
+
     pygame.mixer.music.play(-1)
 
 
