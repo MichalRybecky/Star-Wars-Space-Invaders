@@ -4,7 +4,6 @@
 import pygame
 import os
 import random
-import time
 
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
@@ -20,6 +19,10 @@ MUSIC_ON = pygame.transform.scale(MUSIC_ON, (40, 40))
 MUSIC_OFF = pygame.image.load(os.path.join("assets", "music_off.png"))
 MUSIC_OFF = pygame.transform.scale(MUSIC_OFF, (40, 40))
 
+SFX_ON = pygame.image.load(os.path.join("assets", "sfx_on.png"))
+SFX_ON = pygame.transform.scale(SFX_ON, (50, 50))
+SFX_OFF = pygame.image.load(os.path.join("assets", "sfx_off.png"))
+SFX_OFF = pygame.transform.scale(SFX_OFF, (50, 50))
 
 # Loading Ship Images
 CIS_FIGHTER = pygame.image.load(
@@ -238,8 +241,10 @@ class Player(Ship):
                 self.lasers.append(laser)
 
             self.cool_down_counter = 1
-            SFX_PLAYER_FIRE.set_volume(0.2)
-            SFX_PLAYER_FIRE.play()
+
+            if sfx_playing:
+                SFX_PLAYER_FIRE.set_volume(0.2)
+                SFX_PLAYER_FIRE.play()
 
     def healthbar(self, window):
         pygame.draw.rect(window, (255, 0, 0), (self.x, self.y +
@@ -269,8 +274,9 @@ class Enemy(Ship):
                 laser = Laser(self.x + 13, self.y + 15, self.laser_img)
                 self.lasers.append(laser)
                 self.cool_down_counter = 1
-                SFX_ENEMY_FIRE.set_volume(0.3)
-                SFX_ENEMY_FIRE.play()
+                if sfx_playing:
+                    SFX_ENEMY_FIRE.set_volume(0.3)
+                    SFX_ENEMY_FIRE.play()
 
     def get_y(self):
         return self.y
@@ -283,14 +289,6 @@ def music_on():
 
 def music_off():
     pygame.mixer.music.stop()
-
-
-def sfx_on():
-    sfx_playing = True
-
-
-def sfx_off():
-    sfx_playing = False
 
 
 def collide(obj1, obj2):
@@ -329,7 +327,6 @@ def main(p_v, p_l_v, ship_class):
 
     player_vel = p_v
     player_laser_vel = p_l_v
-    player_health = 100
     player = Player(450, 500, ship_class)
 
     power_up_duration = -1
@@ -390,7 +387,7 @@ def main(p_v, p_l_v, ship_class):
         if lives <= 0 or player.health < 0:
             lost = True
             lost_count += 1
-            if player.health < 0 and player_sfx_played == False:
+            if player.health < 0 and player_sfx_played == False and sfx_playing:
                 SFX_PLAYER_DESTROYED.set_volume(1)
                 SFX_PLAYER_DESTROYED.play()
                 player_sfx_played = True
@@ -435,7 +432,7 @@ def main(p_v, p_l_v, ship_class):
 
         if enemies_on_screen() > 6:
             if freeze_active == 0:
-                if random.randrange(5000) == 1:
+                if random.randrange(2500) == 1:
                     if freeze_enemies == -1:
                         pu_type = "enemy_freeze"
                         power_up = Power_up(random.randrange(
@@ -517,8 +514,6 @@ def main(p_v, p_l_v, ship_class):
 def main_menu():
     global music_playing
     global sfx_playing
-    music_playing = True
-    sfx_playing = True
     run = True
     main_font = pygame.font.Font("starjedi.ttf", 30)
     click = False
@@ -534,9 +529,9 @@ def main_menu():
             (WIDTH / 2) - 130, (HEIGHT / 2), 260, 50)
         button_leave = pygame.Rect(
             (WIDTH / 2) - 130, (HEIGHT / 2) + 80, 260, 50)
-        button_sfx = pygame.Rect(
-            (WIDTH) - 150, 20, 50, 50)
         button_music = pygame.Rect(
+            (WIDTH) - 150, 20, 50, 50)
+        button_sfx = pygame.Rect(
             (WIDTH) - 80, 20, 50, 50)
         pygame.draw.rect(WIN, (204, 204, 204), button_new_game)
         pygame.draw.rect(WIN, (204, 204, 204), button_leave)
@@ -554,14 +549,16 @@ def main_menu():
         label_change_ship = main_font.render("Change Ship", 1, (0, 47, 125))
         WIN.blit(label_change_ship, (398, 375))
 
-        label_sfx = main_font.render("S", 1, (0, 47, 125))
-        WIN.blit(label_sfx, ((WIDTH / 2) + 360, 18))
-
         # Menu Icons
-        if music_playing == True:
-            WIN.blit(MUSIC_ON, ((WIDTH / 2) + 425, 25))
+        if music_playing:
+            WIN.blit(MUSIC_ON, ((WIDTH / 2) + 352, 25))
         else:
-            WIN.blit(MUSIC_OFF, ((WIDTH / 2) + 425, 25))
+            WIN.blit(MUSIC_OFF, ((WIDTH / 2) + 352, 25))
+
+        if sfx_playing:
+            WIN.blit(SFX_ON, ((WIDTH / 2) + 422, 21))
+        else:
+            WIN.blit(SFX_OFF, ((WIDTH / 2) + 422, 21))
 
         # Button Activations
         if button_new_game.collidepoint((pos_x, pos_y)):
@@ -575,14 +572,21 @@ def main_menu():
                 change_ship_menu()
         if button_music.collidepoint((pos_x, pos_y)):
             if click:
-                if music_playing == True:
+                if music_playing:
                     music_off()
-                    print("music_off")
                     music_playing = False
                 else:
                     music_on()
-                    print("music_on")
                     music_playing = True
+                main_menu()
+
+        if button_sfx.collidepoint((pos_x, pos_y)):
+            if click:
+                if sfx_playing:
+                    sfx_playing = False
+                else:
+                    sfx_playing = True
+                main_menu()
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -656,10 +660,12 @@ def change_ship_menu():
 
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-                    click == False
+                    click = False
 
     pygame.quit()
 
 
+music_playing = True
+sfx_playing = True
 music_on()
 main_menu()
