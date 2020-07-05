@@ -269,14 +269,21 @@ class Enemy(Ship):
         return self.y
 
 
-def music():
-    if switch == True:
-        pygame.mixer.music.set_volume(0.7)
-        pygame.mixer.music.play(-1)
-        switch = False
-    else:
-        pygame.mixer.music.stop()
-        switch = True
+def music_on():
+    pygame.mixer.music.set_volume(0.7)
+    pygame.mixer.music.play(-1)
+
+
+def music_off():
+    pygame.mixer.music.stop()
+
+
+def sfx_on():
+    sfx_playing = True
+
+
+def sfx_off():
+    sfx_playing = False
 
 
 def collide(obj1, obj2):
@@ -380,7 +387,6 @@ def main(p_v, p_l_v, ship_class):
                 SFX_PLAYER_DESTROYED.set_volume(1)
                 SFX_PLAYER_DESTROYED.play()
                 player_sfx_played = True
-
 
         if lost:
             if lost_count > FPS * 3:
@@ -502,6 +508,10 @@ def main(p_v, p_l_v, ship_class):
 
 
 def main_menu():
+    global music_playing
+    global sfx_playing
+    music_playing = True
+    sfx_playing = True
     run = True
     main_font = pygame.font.Font("starjedi.ttf", 30)
     click = False
@@ -555,7 +565,14 @@ def main_menu():
                 change_ship_menu()
         if button_music.collidepoint((pos_x, pos_y)):
             if click:
-                music()
+                if music_playing == True:
+                    music_off()
+                    print("music_off")
+                    music_playing = False
+                else:
+                    music_on()
+                    print("music_on")
+                    music_playing = True
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -565,6 +582,10 @@ def main_menu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    click = False
     pygame.quit()
 
 
@@ -625,5 +646,6 @@ def change_ship_menu():
 
     pygame.quit()
 
-music()
+
+music_on()
 main_menu()

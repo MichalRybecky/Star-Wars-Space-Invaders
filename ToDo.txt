@@ -6,6 +6,7 @@ Star Wars - Space Invaders: ToDo list
 - Bugs
     - Leaving causes error on other machines
     - Healthbar stays green after death
+    - Mouse button down lasts long, it needs to be just one click
 
 
 - Sounds
