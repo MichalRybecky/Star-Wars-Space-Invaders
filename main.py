@@ -246,10 +246,14 @@ class Player(Ship):
                 SFX_PLAYER_FIRE.play()
 
     def healthbar(self, window):
-        pygame.draw.rect(window, (255, 0, 0), (self.x, self.y +
-                                               self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
-        pygame.draw.rect(window, (0, 255, 0), (self.x, self.y + self.ship_img.get_height() +
-                                               10, self.ship_img.get_width() * (self.health / self.max_health), 10))
+        if self.health >= 0:
+            pygame.draw.rect(window, (255, 0, 0), (self.x, self.y +
+                                                   self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
+            pygame.draw.rect(window, (0, 255, 0), (self.x, self.y + self.ship_img.get_height() +
+                                                   10, self.ship_img.get_width() * (self.health / self.max_health), 10))
+        elif self.health < 0:
+            pygame.draw.rect(window, (255, 0, 0), (self.x, self.y +
+                                                   self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
 
 
 class Enemy(Ship):
