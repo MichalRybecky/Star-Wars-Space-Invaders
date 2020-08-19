@@ -12,6 +12,7 @@ pygame.init()
 WIDTH, HEIGHT = 1000, 750
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Star Wars - Space Invaders")
+main_font = pygame.font.Font("starjedi.ttf", 30)
 
 # Loading Icons
 MUSIC_ON = pygame.image.load(os.path.join("assets/menu_icons", "music_on.png"))
@@ -330,7 +331,6 @@ def main(p_v, p_l_v, ship_class):
     lives = 5
     score = 0
     s = 0
-    main_font = pygame.font.Font("starjedi.ttf", 30)
     score_font = pygame.font.Font("starjedi.ttf", 20)
 
     enemies = []
@@ -456,6 +456,7 @@ def main(p_v, p_l_v, ship_class):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                break
                 quit()
 
         keys = pygame.key.get_pressed()
@@ -470,7 +471,7 @@ def main(p_v, p_l_v, ship_class):
         if keys[pygame.K_SPACE]:
             player.shoot()
         if keys[pygame.K_ESCAPE]:
-            main_menu()
+            pause_menu()
 
         for enemy in enemies[:]:
             if freeze_enemies == -1:
@@ -525,11 +526,83 @@ def main(p_v, p_l_v, ship_class):
         player.move_lasers(-player_laser_vel, enemies)
 
 
+def settings_menu():
+    pass
+
+
+def save():
+    print("Save is not ready yet")
+
+
+def pause_menu():
+    click = False
+    run = True
+
+    while run:
+
+        pos_x, pos_y = pygame.mouse.get_pos()
+
+        # Menu Buttons
+        button_resume = pygame.Rect(
+            (WIDTH / 2) - 130, (HEIGHT / 2) - 80, 260, 50)
+        button_save = pygame.Rect(
+            (WIDTH / 2) - 130, (HEIGHT / 2), 260, 50)
+        button_settings = pygame.Rect(
+            (WIDTH / 2) - 130, (HEIGHT / 2) + 80, 260, 50)
+        button_main_menu = pygame.Rect(
+            (WIDTH / 2) - 130, (HEIGHT / 2) + 160, 260, 50)
+
+        pygame.draw.rect(WIN, (204, 204, 204), button_resume)
+        pygame.draw.rect(WIN, (204, 204, 204), button_save)
+        pygame.draw.rect(WIN, (204, 204, 204), button_settings)
+        pygame.draw.rect(WIN, (204, 204, 204), button_main_menu)
+
+        # Menu Labels
+        label_resume = main_font.render("Resume", 1, (0, 47, 125))
+        WIN.blit(label_resume, (417, 295))
+
+        label_save = main_font.render("Save", 1, (0, 47, 125))
+        WIN.blit(label_save, (445, 455))
+
+        label_settings = main_font.render("Settings", 1, (0, 47, 125))
+        WIN.blit(label_settings, (398, 375))
+
+        label_main_menu = main_font.render("Main menu", 1, (0, 47, 125))
+        WIN.blit(label_main_menu, (398, 375))
+
+        # Button Activations
+        if button_resume.collidepoint((pos_x, pos_y)):
+            if click:
+                run = False
+        if button_save.collidepoint((pos_x, pos_y)):
+            if click:
+                save()
+        if button_settings.collidepoint((pos_x, pos_y)):
+            if click:
+                settings_menu()
+        if button_main_menu.collidepoint((pos_x, pos_y)):
+            if click:
+                run = False
+                main_menu()
+
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    click = False
+
+
 def main_menu():
     global music_playing
     global sfx_playing
     run = True
-    main_font = pygame.font.Font("starjedi.ttf", 30)
     click = False
     while run:
         WIN.blit(BG, (0, 0))
@@ -580,6 +653,7 @@ def main_menu():
                 ship_type("classic")
         if button_leave.collidepoint((pos_x, pos_y)):
             if click:
+                break
                 quit()
         if button_change_ship.collidepoint((pos_x, pos_y)):
             if click:
@@ -620,7 +694,6 @@ def main_menu():
 def change_ship_menu():
     run = True
     click = False
-    main_font = pygame.font.Font("starjedi.ttf", 30)
     while run:
         WIN.blit(BG, (0, 0))
 
@@ -666,6 +739,7 @@ def change_ship_menu():
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                break
                 quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -675,7 +749,6 @@ def change_ship_menu():
             if event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
                     click = False
-
     pygame.quit()
 
 
