@@ -5,10 +5,10 @@ Star Wars - Space Invaders: ToDo list
 
 - Bugs
     - Leaving causes error on other machines
+    - Mousebutton1 is pressed in main menu after death
 
 
 - Sounds
-    - Multiple music files
     - Authentic blaster SFX
     - Add enemy_explode
 
