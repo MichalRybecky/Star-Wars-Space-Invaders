@@ -531,7 +531,11 @@ def settings_menu():
 
 
 def save():
-    print("Save is not ready yet")
+    print("Saving a game is not avaible yet...")
+
+
+def load():
+    print("Loading a game is not avaible yet...")
 
 
 def pause_menu():
@@ -539,7 +543,6 @@ def pause_menu():
     run = True
 
     while run:
-
         pos_x, pos_y = pygame.mouse.get_pos()
 
         # Menu Buttons
@@ -559,16 +562,16 @@ def pause_menu():
 
         # Menu Labels
         label_resume = main_font.render("Resume", 1, (0, 47, 125))
-        WIN.blit(label_resume, (417, 295))
+        WIN.blit(label_resume, ((WIDTH / 2) - 60, 295))
 
         label_save = main_font.render("Save", 1, (0, 47, 125))
-        WIN.blit(label_save, (445, 455))
+        WIN.blit(label_save, ((WIDTH / 2) - 45, 375))
 
         label_settings = main_font.render("Settings", 1, (0, 47, 125))
-        WIN.blit(label_settings, (398, 375))
+        WIN.blit(label_settings, ((WIDTH / 2) - 75, 455))
 
         label_main_menu = main_font.render("Main menu", 1, (0, 47, 125))
-        WIN.blit(label_main_menu, (398, 375))
+        WIN.blit(label_main_menu, ((WIDTH / 2) - 90, 535))
 
         # Button Activations
         if button_resume.collidepoint((pos_x, pos_y)):
@@ -616,6 +619,8 @@ def main_menu():
             (WIDTH / 2) - 130, (HEIGHT / 2), 260, 50)
         button_leave = pygame.Rect(
             (WIDTH / 2) - 130, (HEIGHT / 2) + 80, 260, 50)
+        button_load = pygame.Rect(
+            (WIDTH / 2) - 130, (HEIGHT / 2) + 160, 260, 50)
         button_music = pygame.Rect(
             (WIDTH) - 150, 20, 50, 50)
         button_sfx = pygame.Rect(
@@ -623,6 +628,7 @@ def main_menu():
         pygame.draw.rect(WIN, (204, 204, 204), button_new_game)
         pygame.draw.rect(WIN, (204, 204, 204), button_leave)
         pygame.draw.rect(WIN, (204, 204, 204), button_change_ship)
+        pygame.draw.rect(WIN, (204, 204, 204), button_load)
         pygame.draw.rect(WIN, (204, 204, 204), button_sfx)
         pygame.draw.rect(WIN, (204, 204, 204), button_music)
 
@@ -630,11 +636,14 @@ def main_menu():
         label_new_game = main_font.render("New Game", 1, (0, 47, 125))
         WIN.blit(label_new_game, (417, 295))
 
-        label_leave = main_font.render("Leave", 1, (0, 47, 125))
-        WIN.blit(label_leave, (445, 455))
-
         label_change_ship = main_font.render("Change Ship", 1, (0, 47, 125))
         WIN.blit(label_change_ship, (398, 375))
+
+        label_load = main_font.render("Load", 1, (0, 47, 125))
+        WIN.blit(label_load, (450, 455))
+
+        label_leave = main_font.render("Leave", 1, (0, 47, 125))
+        WIN.blit(label_leave, (445, 535))
 
         # Menu Icons
         if music_playing:
@@ -658,6 +667,9 @@ def main_menu():
         if button_change_ship.collidepoint((pos_x, pos_y)):
             if click:
                 change_ship_menu()
+        if button_load.collidepoint((pos_x, pos_y)):
+            if click:
+                load()
         if button_music.collidepoint((pos_x, pos_y)):
             if click:
                 if music_playing:
