@@ -621,9 +621,9 @@ def main_menu():
             (WIDTH / 2) - 130, (HEIGHT / 2) - 80, 260, 50)
         button_change_ship = pygame.Rect(
             (WIDTH / 2) - 130, (HEIGHT / 2), 260, 50)
-        button_leave = pygame.Rect(
-            (WIDTH / 2) - 130, (HEIGHT / 2) + 80, 260, 50)
         button_load = pygame.Rect(
+            (WIDTH / 2) - 130, (HEIGHT / 2) + 80, 260, 50)
+        button_leave = pygame.Rect(
             (WIDTH / 2) - 130, (HEIGHT / 2) + 160, 260, 50)
         button_music = pygame.Rect(
             (WIDTH) - 150, 20, 50, 50)
