@@ -1,3 +1,6 @@
-# Star Wars-Space Invaders style
+# Star Wars-Space Invaders style game
 
-# Started: 15/4/2020
+###Dependencies
+* pygame
+
+To play, run **main.py**
