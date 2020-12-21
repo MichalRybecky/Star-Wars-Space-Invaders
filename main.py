@@ -377,7 +377,7 @@ def main(p_v, p_l_v, ship_class):
 
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
-        WIN.blit(score_label, (MID_W - (score_label.get_width() / 2), 20))
+        WIN.blit(score_label, (MID_W - (score_label.get_width() // 2), 20))
 
         for enemy in enemies:
             enemy.draw(WIN)
@@ -389,12 +389,12 @@ def main(p_v, p_l_v, ship_class):
                 power_up.draw(WIN)
 
         if lost:
-            lost_label = main_font.render("You lost!", 1, (255, 255, 255))
-            WIN.blit(lost_label, (WIDTH / 2 - lost_label.get_width() / 2, 350))
+            lost_label = main_font.render("Game Over!", 1, (255, 255, 255))
+            WIN.blit(lost_label, (MID_W - lost_label.get_width() / 2, 350))
             final_score_label = main_font.render(
                 f"Your score is {score}", 1, (255, 255, 255))
             WIN.blit(final_score_label, (MID_W -
-                                         (final_score_label.get_width() / 2), 400))
+                                         (final_score_label.get_width() // 2), 400))
 
         pygame.display.update()
 
@@ -416,6 +416,7 @@ def main(p_v, p_l_v, ship_class):
 
         if lost:
             if lost_count > FPS * 3:
+                database.add_game(score, wave)
                 run = False
             else:
                 continue
