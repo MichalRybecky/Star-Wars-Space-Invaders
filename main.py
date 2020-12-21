@@ -5,6 +5,8 @@ import pygame
 import os
 import random
 
+from utils import database
+
 pygame.mixer.pre_init(44100, -16, 1, 512)
 pygame.init()
 
@@ -533,6 +535,12 @@ def main(p_v, p_l_v, ship_class):
 
 
 def settings_menu():
+    '''
+    TODO:
+    difficulty
+    save/do not save
+    clear statistics with prompt
+    '''
     pass
 
 
