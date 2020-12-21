@@ -1,6 +1,6 @@
 # Star Wars-Space Invaders style game
 
-###Dependencies
+### Dependencies
 * pygame
 
 To play, run **main.py**
