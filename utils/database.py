@@ -2,7 +2,7 @@
 Database handler for a CSV file.
 
 CSV file format:
-date,daytime,score,wave
+date,playtime,score,wave
 """
 
 from datetime import datetime
@@ -10,11 +10,9 @@ from datetime import datetime
 stat_file = 'stats.txt'
 
 
-def add_game(score, wave):
-    naive_time = str(datetime.now())
-    date, time = naive_time.split()
-    time = time.split('.')
+def add_game(score, wave, playtime):
+    date = (str(datetime.now())).split()[0]
     with open(stat_file, 'a') as file:
-        file.write(f'{date},{time[0]},{score},{wave}\n')
+        file.write(f'{date},{playtime},{score},{wave}\n')
 
 

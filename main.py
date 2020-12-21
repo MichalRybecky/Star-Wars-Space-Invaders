@@ -4,6 +4,7 @@
 import pygame
 import os
 import random
+import time
 
 from utils import database
 
@@ -360,6 +361,8 @@ def main(p_v, p_l_v, ship_class):
     lost = False
     lost_count = 0
 
+    start = time.time()
+
     def enemies_on_screen():
         n_of_enemies_on_screen = 0
         for enemy in enemies:
@@ -416,7 +419,8 @@ def main(p_v, p_l_v, ship_class):
 
         if lost:
             if lost_count > FPS * 3:
-                database.add_game(score, wave)
+                playtime = round(time.time() - start, 2)
+                database.add_game(score, wave, playtime)
                 run = False
             else:
                 continue
