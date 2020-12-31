@@ -1,10 +1,11 @@
 # 15.4.2020
 # Star Wars PyGame, Space Invaders style
 
+import time
 import random
 import pygame
+from utils import database
 from utils.load_assets import *
-
 
 WIDTH_H, HEIGHT_H = WIDTH // 2, HEIGHT // 2
 
@@ -298,6 +299,8 @@ def main(p_v, p_l_v, ship_class):
     lost = False
     lost_count = 0
 
+    start = time.time()
+
     def enemies_on_screen():
         n_of_enemies_on_screen = 0
         for enemy in enemies:
@@ -316,6 +319,7 @@ def main(p_v, p_l_v, ship_class):
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
         WIN.blit(score_label, ((WIDTH_H) - (score_label.get_width() // 2), 20))
+
 
         for enemy in enemies:
             enemy.draw(WIN)
@@ -354,6 +358,8 @@ def main(p_v, p_l_v, ship_class):
 
         if lost:
             if lost_count > FPS * 3:
+                playtime = round(time.time() - start, 2)
+                database.add_game(score, wave, playtime)
                 run = False
             else:
                 continue
@@ -473,15 +479,13 @@ def main(p_v, p_l_v, ship_class):
 
 
 def settings_menu():
+    '''
+    TODO:
+    difficulty
+    save/do not save
+    clear statistics with prompt
+    '''
     pass
-
-
-def save():
-    print("Saving a game is not avaible yet...")
-
-
-def load():
-    print("Loading a game is not avaible yet...")
 
 
 def pause_menu():
@@ -502,7 +506,6 @@ def pause_menu():
             (WIDTH_H) - 130, (HEIGHT_H) + 160, 260, 50)
 
         pygame.draw.rect(WIN, (204, 204, 204), button_resume)
-        pygame.draw.rect(WIN, (204, 204, 204), button_save)
         pygame.draw.rect(WIN, (204, 204, 204), button_settings)
         pygame.draw.rect(WIN, (204, 204, 204), button_main_menu)
 
@@ -523,9 +526,6 @@ def pause_menu():
         if button_resume.collidepoint((pos_x, pos_y)):
             if click:
                 run = False
-        if button_save.collidepoint((pos_x, pos_y)):
-            if click:
-                save()
         if button_settings.collidepoint((pos_x, pos_y)):
             if click:
                 settings_menu()
@@ -567,6 +567,7 @@ def main_menu():
             (WIDTH_H) - 130, (HEIGHT_H) + 80, 260, 50)
         button_leave = pygame.Rect(
             (WIDTH_H) - 130, (HEIGHT_H) + 160, 260, 50)
+
         button_music = pygame.Rect(
             (WIDTH) - 150, 20, 50, 50)
         button_sfx = pygame.Rect(
@@ -574,7 +575,6 @@ def main_menu():
         pygame.draw.rect(WIN, (204, 204, 204), button_new_game)
         pygame.draw.rect(WIN, (204, 204, 204), button_leave)
         pygame.draw.rect(WIN, (204, 204, 204), button_change_ship)
-        pygame.draw.rect(WIN, (204, 204, 204), button_load)
         pygame.draw.rect(WIN, (204, 204, 204), button_sfx)
         pygame.draw.rect(WIN, (204, 204, 204), button_music)
 
@@ -585,11 +585,8 @@ def main_menu():
         label_change_ship = main_font.render("Change Ship", 1, (0, 47, 125))
         WIN.blit(label_change_ship, (398, 375))
 
-        label_load = main_font.render("Load", 1, (0, 47, 125))
-        WIN.blit(label_load, (450, 455))
-
         label_leave = main_font.render("Leave", 1, (0, 47, 125))
-        WIN.blit(label_leave, (445, 535))
+        WIN.blit(label_leave, (445, 455))
 
         # Menu Icons
         if music_playing:
@@ -602,6 +599,7 @@ def main_menu():
         else:
             WIN.blit(SFX_OFF, ((WIDTH_H) + 422, 21))
 
+
         # Button Activations
         if button_new_game.collidepoint((pos_x, pos_y)):
             if click:
@@ -613,9 +611,6 @@ def main_menu():
         if button_change_ship.collidepoint((pos_x, pos_y)):
             if click:
                 change_ship_menu()
-        if button_load.collidepoint((pos_x, pos_y)):
-            if click:
-                load()
         if button_music.collidepoint((pos_x, pos_y)):
             if click:
                 if music_playing:
@@ -666,6 +661,7 @@ def change_ship_menu():
             (WIDTH_H) - 100, (HEIGHT_H), 200, 50)
         button_sniper = pygame.Rect(
             (WIDTH_H) - 100, (HEIGHT_H) + 80, 200, 50)
+
         pygame.draw.rect(WIN, (204, 204, 204), button_classic)
         pygame.draw.rect(WIN, (204, 204, 204), button_heavy)
         pygame.draw.rect(WIN, (204, 204, 204), button_scout)
