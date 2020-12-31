@@ -498,41 +498,26 @@ def pause_menu():
         # Menu Buttons
         button_resume = pygame.Rect(
             (WIDTH_H) - 130, (HEIGHT_H) - 80, 260, 50)
-        button_save = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H), 260, 50)
-        button_settings = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) + 80, 260, 50)
         button_main_menu = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) + 160, 260, 50)
+            (WIDTH_H) - 130, (HEIGHT_H), 260, 50)
 
         pygame.draw.rect(WIN, (204, 204, 204), button_resume)
-        pygame.draw.rect(WIN, (204, 204, 204), button_settings)
         pygame.draw.rect(WIN, (204, 204, 204), button_main_menu)
 
         # Menu Labels
         label_resume = main_font.render("Resume", 1, (0, 47, 125))
         WIN.blit(label_resume, ((WIDTH_H) - 60, 295))
 
-        label_save = main_font.render("Save", 1, (0, 47, 125))
-        WIN.blit(label_save, ((WIDTH_H) - 45, 375))
-
-        label_settings = main_font.render("Settings", 1, (0, 47, 125))
-        WIN.blit(label_settings, ((WIDTH_H) - 75, 455))
-
         label_main_menu = main_font.render("Main menu", 1, (0, 47, 125))
-        WIN.blit(label_main_menu, ((WIDTH_H) - 90, 535))
+        WIN.blit(label_main_menu, ((WIDTH_H) - 90, 375))
 
         # Button Activations
-        if button_resume.collidepoint((pos_x, pos_y)):
-            if click:
-                run = False
-        if button_settings.collidepoint((pos_x, pos_y)):
-            if click:
-                settings_menu()
-        if button_main_menu.collidepoint((pos_x, pos_y)):
-            if click:
-                run = False
-                main_menu()
+        if click:
+            if button_resume.collidepoint((pos_x, pos_y)):
+                    run = False
+            if button_main_menu.collidepoint((pos_x, pos_y)):
+                    run = False
+                    main_menu()
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -563,10 +548,8 @@ def main_menu():
             (WIDTH_H) - 130, (HEIGHT_H) - 80, 260, 50)
         button_change_ship = pygame.Rect(
             (WIDTH_H) - 130, (HEIGHT_H), 260, 50)
-        button_load = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) + 80, 260, 50)
         button_leave = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) + 160, 260, 50)
+            (WIDTH_H) - 130, (HEIGHT_H) + 80, 260, 50)
 
         button_music = pygame.Rect(
             (WIDTH) - 150, 20, 50, 50)
