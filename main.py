@@ -43,15 +43,14 @@ class Power_up:
         self.y = y
         self.type = type
 
-        if self.type == "speed":
-            self.pu_img = SPEED_PU
-        elif self.type == "health_player" or self.type == "health_lives":
-            self.pu_img = HEALTH_PU
-        elif self.type == "laser_speed":
-            self.pu_img = LASER_SPEED_PU
-        elif self.type == "enemy_freeze":
-            self.pu_img = ENEMY_FREEZE_PU
-
+        types = {
+            'speed': SPEED_PU,
+            'health_player': HEALTH_PU,
+            'health_lives': HEALTH_PU,
+            'laser_speed': LASER_SPEED_PU,
+            'enemy_freeze': ENEMY_FREEZE_PU
+        }
+        self.pu_img = types[self.type]
         self.mask = pygame.mask.from_surface(self.pu_img)
 
     def draw(self, window):
