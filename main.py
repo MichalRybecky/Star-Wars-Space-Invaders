@@ -37,7 +37,7 @@ class Laser:
         return collide(self, obj)
 
 
-class Power_up:
+class PowerUP:
     def __init__(self, x, y, type):
         self.x = x
         self.y = y
@@ -104,23 +104,13 @@ class Player(Ship):
         self.laser_img = LASER_BLUE_MED
         self.ship_class = ship_class
 
-        if ship_class == "classic":
-            self.ship_img = ARC_170
-            self.health = 100
-            self.laser_cooldown = 30
-        elif ship_class == "heavy":
-            self.ship_img = LAAT
-            self.health = 150
-            self.laser_cooldown = 15
-        elif ship_class == "scout":
-            self.ship_img = JEDI_INTERCEPTOR
-            self.health = 80
-            self.laser_cooldown = 25
-        elif ship_class == "sniper":
-            self.ship_img = Y_WING
-            self.health = 100
-            self.laser_cooldown = 60
-
+        ship_classes = {
+            'classic': (ARC_170, 100, 30),
+            'heavy': (LAAT, 150, 15),
+            'scout': (JEDI_INTERCEPTOR, 80, 25),
+            'sniper': (Y_WING, 100, 60)
+        }
+        self.ship_img, self.health, self.laser_cooldown = ship_classes[ship_class]
         self.max_health = self.health
         self.mask = pygame.mask.from_surface(self.ship_img)
 
@@ -155,33 +145,17 @@ class Player(Ship):
 
     def shoot(self):
         if self.cool_down_counter == 0:
+            lasers_pos = {
+                'classic': (self.x + 4, self.y + 30, self.x + 139, self.y + 30),
+                'heavy': (self.x + 2, self.y + 50, self.x + 112, self.y + 50),
+                'scout': (self.x + 35, self.y, self.x + 47, self.y),
+                'sniper': (self.x + 22, self.y, self.x + 30, self.y)
+            }
 
-            if self.ship_class == "classic":
-                laser = Laser(self.x + 4, self.y + 30, self.laser_img)
-                self.lasers.append(laser)
-                laser = Laser(self.x + self.ship_img.get_width() -
-                              11, self.y + 30, self.laser_img)
-                self.lasers.append(laser)
-
-            elif self.ship_class == "heavy":
-                laser = Laser(self.x + 2, self.y + 50, self.laser_img)
-                self.lasers.append(laser)
-                laser = Laser(self.x + self.ship_img.get_width() -
-                              8, self.y + 50, self.laser_img)
-                self.lasers.append(laser)
-
-            elif self.ship_class == "scout":
-                laser = Laser(self.x + 35, self.y, self.laser_img)
-                self.lasers.append(laser)
-                laser = Laser(self.x + self.ship_img.get_width() -
-                              41, self.y, self.laser_img)
-                self.lasers.append(laser)
-
-            elif self.ship_class == "sniper":
-                laser = Laser(self.x + 22, self.y, self.laser_img)
-                self.lasers.append(laser)
-                laser = Laser(self.x + 30, self.y, self.laser_img)
-                self.lasers.append(laser)
+            laser = Laser(*lasers_pos[self.ship_class][:2], self.laser_img)
+            self.lasers.append(laser)
+            laser = Laser(*lasers_pos[self.ship_class][2:], self.laser_img)
+            self.lasers.append(laser)
 
             self.cool_down_counter = 1
 
@@ -368,7 +342,7 @@ def main(p_v, p_l_v, ship_class):
                             avaible_pu_types.append("health_lives")
 
                     pu_type = random.choice((avaible_pu_types))
-                    power_up = Power_up(random.randrange(
+                    power_up = PowerUP(random.randrange(
                         50, WIDTH - 50), random.randrange(50, HEIGHT - 50), pu_type)
                     power_ups.append(power_up)
 
@@ -377,7 +351,7 @@ def main(p_v, p_l_v, ship_class):
                 if random.randrange(2500) == 1:
                     if freeze_enemies == -1:
                         pu_type = "enemy_freeze"
-                        power_up = Power_up(random.randrange(
+                        power_up = PowerUP(random.randrange(
                             50, WIDTH - 50), random.randrange(50, HEIGHT - 50), pu_type)
                         power_ups.append(power_up)
                         freeze_active = 1
