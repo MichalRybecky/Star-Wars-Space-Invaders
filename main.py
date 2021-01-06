@@ -31,7 +31,7 @@ class Laser:
         self.y += vel
 
     def off_screen(self, height):
-        return not(height >= self.y >= 0)
+        return not (height >= self.y >= 0)
 
     def collision(self, obj):
         return collide(self, obj)
@@ -44,11 +44,11 @@ class PowerUP:
         self.type = type
 
         types = {
-            'speed': SPEED_PU,
-            'health_player': HEALTH_PU,
-            'health_lives': HEALTH_PU,
-            'laser_speed': LASER_SPEED_PU,
-            'enemy_freeze': ENEMY_FREEZE_PU
+            "speed": SPEED_PU,
+            "health_player": HEALTH_PU,
+            "health_lives": HEALTH_PU,
+            "laser_speed": LASER_SPEED_PU,
+            "enemy_freeze": ENEMY_FREEZE_PU,
         }
         self.pu_img = types[self.type]
         self.mask = pygame.mask.from_surface(self.pu_img)
@@ -105,10 +105,10 @@ class Player(Ship):
         self.ship_class = ship_class
 
         ship_classes = {
-            'classic': (ARC_170, 100, 30),
-            'heavy': (LAAT, 150, 15),
-            'scout': (JEDI_INTERCEPTOR, 80, 25),
-            'sniper': (Y_WING, 100, 60)
+            "classic": (ARC_170, 100, 30),
+            "heavy": (LAAT, 150, 15),
+            "scout": (JEDI_INTERCEPTOR, 80, 25),
+            "sniper": (Y_WING, 100, 60),
         }
         self.ship_img, self.health, self.laser_cooldown = ship_classes[ship_class]
         self.max_health = self.health
@@ -146,10 +146,10 @@ class Player(Ship):
     def shoot(self):
         if self.cool_down_counter == 0:
             lasers_pos = {
-                'classic': (self.x + 4, self.y + 30, self.x + 139, self.y + 30),
-                'heavy': (self.x + 2, self.y + 50, self.x + 112, self.y + 50),
-                'scout': (self.x + 35, self.y, self.x + 47, self.y),
-                'sniper': (self.x + 22, self.y, self.x + 30, self.y)
+                "classic": (self.x + 4, self.y + 30, self.x + 139, self.y + 30),
+                "heavy": (self.x + 2, self.y + 50, self.x + 112, self.y + 50),
+                "scout": (self.x + 35, self.y, self.x + 47, self.y),
+                "sniper": (self.x + 22, self.y, self.x + 30, self.y),
             }
 
             laser = Laser(*lasers_pos[self.ship_class][:2], self.laser_img)
@@ -165,20 +165,44 @@ class Player(Ship):
 
     def healthbar(self, window):
         if self.health >= 0:
-            pygame.draw.rect(window, (255, 0, 0), (self.x, self.y +
-                                                   self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
-            pygame.draw.rect(window, (0, 255, 0), (self.x, self.y + self.ship_img.get_height() +
-                                                   10, self.ship_img.get_width() * (self.health / self.max_health), 10))
+            pygame.draw.rect(
+                window,
+                (255, 0, 0),
+                (
+                    self.x,
+                    self.y + self.ship_img.get_height() + 10,
+                    self.ship_img.get_width(),
+                    10,
+                ),
+            )
+            pygame.draw.rect(
+                window,
+                (0, 255, 0),
+                (
+                    self.x,
+                    self.y + self.ship_img.get_height() + 10,
+                    self.ship_img.get_width() * (self.health / self.max_health),
+                    10,
+                ),
+            )
         elif self.health < 0:
-            pygame.draw.rect(window, (255, 0, 0), (self.x, self.y +
-                                                   self.ship_img.get_height() + 10, self.ship_img.get_width(), 10))
+            pygame.draw.rect(
+                window,
+                (255, 0, 0),
+                (
+                    self.x,
+                    self.y + self.ship_img.get_height() + 10,
+                    self.ship_img.get_width(),
+                    10,
+                ),
+            )
 
 
 class Enemy(Ship):
     COLOR_MAP = {
         "red": (CIS_FIGHTER, LASER_RED_SMALL),
         "green": (CIS_HYENA_BOMBER, LASER_RED_MED),
-        "blue": (CIS_STRIKE_BOMBER, LASER_RED_MED)
+        "blue": (CIS_STRIKE_BOMBER, LASER_RED_MED),
     }
 
     def __init__(self, x, y, color, health=100):
@@ -210,14 +234,13 @@ def collide(obj1, obj2):
 
 
 def ship_type(ship_class):
-    if ship_class == "classic":
-        main(5, 6, "classic")
-    elif ship_class == "heavy":
-        main(3, 4, "heavy")
-    elif ship_class == "scout":
-        main(7, 8, "scout")
-    elif ship_class == "sniper":
-        main(5, 12, "sniper")
+    ship_classes = {
+        "classic": (5, 6, "classic"),
+        "heavy": (3, 4, "heavy"),
+        "scout": (7, 8, "scout"),
+        "sniper": (5, 12, "sniper"),
+    }
+    main(*ship_classes[ship_class])
 
 
 def main(p_v, p_l_v, ship_class):
@@ -283,8 +306,11 @@ def main(p_v, p_l_v, ship_class):
             lost_label = main_font.render("You lost!", 1, (255, 255, 255))
             WIN.blit(lost_label, (WIDTH_H - lost_label.get_width() / 2, 350))
             final_score_label = main_font.render(
-                f"Your score is {score}", 1, (255, 255, 255))
-            WIN.blit(final_score_label, (WIDTH_H - (final_score_label.get_width() / 2), 400))
+                f"Your score is {score}", 1, (255, 255, 255)
+            )
+            WIN.blit(
+                final_score_label, (WIDTH_H - (final_score_label.get_width() / 2), 400)
+            )
 
         pygame.display.update()
 
@@ -325,8 +351,11 @@ def main(p_v, p_l_v, ship_class):
                 enemy_vel += 1
             wave_lenght += 3
             for i in range(wave_lenght):
-                enemy = Enemy(random.randrange(
-                    50, WIDTH - 100), random.randrange(-1500, -100), random.choice(["red", "blue", "green"]))
+                enemy = Enemy(
+                    random.randrange(50, WIDTH - 100),
+                    random.randrange(-1500, -100),
+                    random.choice(["red", "blue", "green"]),
+                )
                 enemies.append(enemy)
 
             if wave != 1:
@@ -340,8 +369,11 @@ def main(p_v, p_l_v, ship_class):
                             avaible_pu_types.append("health_lives")
 
                     pu_type = random.choice(avaible_pu_types)
-                    power_up = PowerUP(random.randrange(
-                        50, WIDTH - 50), random.randrange(50, HEIGHT - 50), pu_type)
+                    power_up = PowerUP(
+                        random.randrange(50, WIDTH - 50),
+                        random.randrange(50, HEIGHT - 50),
+                        pu_type,
+                    )
                     power_ups.append(power_up)
 
         if enemies_on_screen() > 6:
@@ -349,8 +381,11 @@ def main(p_v, p_l_v, ship_class):
                 if random.randrange(2500) == 1:
                     if freeze_enemies == -1:
                         pu_type = "enemy_freeze"
-                        power_up = PowerUP(random.randrange(
-                            50, WIDTH - 50), random.randrange(50, HEIGHT - 50), pu_type)
+                        power_up = PowerUP(
+                            random.randrange(50, WIDTH - 50),
+                            random.randrange(50, HEIGHT - 50),
+                            pu_type,
+                        )
                         power_ups.append(power_up)
                         freeze_active = 1
 
@@ -361,11 +396,16 @@ def main(p_v, p_l_v, ship_class):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - player_vel > 0:  # move left
             player.x -= player_vel
-        if keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIDTH:  # move right
+        if (
+            keys[pygame.K_d] and player.x + player_vel + player.get_width() < WIDTH
+        ):  # move right
             player.x += player_vel
         if keys[pygame.K_w] and player.y - player_vel > 0:  # move up
             player.y -= player_vel
-        if keys[pygame.K_s] and player.y + player_vel + player.get_height() + 15 < HEIGHT:  # move down
+        if (
+            keys[pygame.K_s]
+            and player.y + player_vel + player.get_height() + 15 < HEIGHT
+        ):  # move down
             player.y += player_vel
         if keys[pygame.K_SPACE]:
             player.shoot()
@@ -619,6 +659,6 @@ def change_ship_menu():
     pygame.quit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     music_on()
     main_menu()
