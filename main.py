@@ -31,7 +31,7 @@ class Laser:
         self.y += vel
 
     def off_screen(self, height):
-        return not(self.y <= height and self.y >= 0)
+        return not(height >= self.y >= 0)
 
     def collision(self, obj):
         return collide(self, obj)
@@ -206,7 +206,7 @@ class Enemy(Ship):
 def collide(obj1, obj2):
     offset_x = obj2.x - obj1.x
     offset_y = obj2.y - obj1.y
-    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) != None
+    return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) is not None
 
 
 def ship_type(ship_class):
@@ -223,7 +223,7 @@ def ship_type(ship_class):
 def main(p_v, p_l_v, ship_class):
     player_sfx_played = False
     run = True
-    FPS = 60
+    _FPS = 60
     wave = 0
     lives = 5
     score = 0
@@ -253,8 +253,8 @@ def main(p_v, p_l_v, ship_class):
 
     def enemies_on_screen():
         n_of_enemies_on_screen = 0
-        for enemy in enemies:
-            if enemy.get_y() > 0:
+        for e in enemies:
+            if e.get_y() > 0:
                 n_of_enemies_on_screen += 1
         return int(n_of_enemies_on_screen)
 
@@ -268,46 +268,44 @@ def main(p_v, p_l_v, ship_class):
 
         WIN.blit(lives_label, (10, 10))
         WIN.blit(level_label, (WIDTH - level_label.get_width() - 10, 10))
-        WIN.blit(score_label, ((WIDTH_H) - (score_label.get_width() // 2), 20))
+        WIN.blit(score_label, (WIDTH_H - (score_label.get_width() // 2), 20))
 
-
-        for enemy in enemies:
-            enemy.draw(WIN)
+        for e in enemies:
+            e.draw(WIN)
 
         player.draw(WIN)
 
         if len(power_ups) >= 1:
-            for power_up in power_ups:
-                power_up.draw(WIN)
+            for p_u in power_ups:
+                p_u.draw(WIN)
 
         if lost:
             lost_label = main_font.render("You lost!", 1, (255, 255, 255))
             WIN.blit(lost_label, (WIDTH_H - lost_label.get_width() / 2, 350))
             final_score_label = main_font.render(
                 f"Your score is {score}", 1, (255, 255, 255))
-            WIN.blit(final_score_label, ((WIDTH_H) -
-                                         (final_score_label.get_width() / 2), 400))
+            WIN.blit(final_score_label, (WIDTH_H - (final_score_label.get_width() / 2), 400))
 
         pygame.display.update()
 
     while run:
-        clock.tick(FPS)
+        clock.tick(_FPS)
         redraw_window()
         if not lost:
-            if s % FPS == 0:
+            if s % _FPS == 0:
                 score += 1
             s += 1
 
         if lives <= 0 or player.health < 0:
             lost = True
             lost_count += 1
-            if player.health < 0 and player_sfx_played == False and sfx_playing:
+            if player.health < 0 and not player_sfx_played and sfx_playing:
                 SFX_PLAYER_DESTROYED.set_volume(1)
                 SFX_PLAYER_DESTROYED.play()
                 player_sfx_played = True
 
         if lost:
-            if lost_count > FPS * 3:
+            if lost_count > _FPS * 3:
                 playtime = round(time.time() - start, 2)
                 database.add_game(score, wave, playtime)
                 run = False
@@ -341,7 +339,7 @@ def main(p_v, p_l_v, ship_class):
                         elif lives < 5:
                             avaible_pu_types.append("health_lives")
 
-                    pu_type = random.choice((avaible_pu_types))
+                    pu_type = random.choice(avaible_pu_types)
                     power_up = PowerUP(random.randrange(
                         50, WIDTH - 50), random.randrange(50, HEIGHT - 50), pu_type)
                     power_ups.append(power_up)
@@ -359,7 +357,6 @@ def main(p_v, p_l_v, ship_class):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 break
-                quit()
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] and player.x - player_vel > 0:  # move left
@@ -382,7 +379,7 @@ def main(p_v, p_l_v, ship_class):
                 freeze_active = 0
 
             if freeze_active == 0:
-                if random.randrange(0, 2 * FPS) == 1:
+                if random.randrange(0, 2 * _FPS) == 1:
                     enemy.shoot()
 
             if collide(enemy, player):
@@ -429,12 +426,12 @@ def main(p_v, p_l_v, ship_class):
 
 
 def settings_menu():
-    '''
+    """
     TODO:
     difficulty
     save/do not save
     clear statistics with prompt
-    '''
+    """
     pass
 
 
@@ -446,28 +443,26 @@ def pause_menu():
         pos_x, pos_y = pygame.mouse.get_pos()
 
         # Menu Buttons
-        button_resume = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) - 80, 260, 50)
-        button_main_menu = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H), 260, 50)
+        button_resume = pygame.Rect(WIDTH_H - 130, HEIGHT_H - 80, 260, 50)
+        button_main_menu = pygame.Rect(WIDTH_H - 130, HEIGHT_H, 260, 50)
 
         pygame.draw.rect(WIN, (204, 204, 204), button_resume)
         pygame.draw.rect(WIN, (204, 204, 204), button_main_menu)
 
         # Menu Labels
         label_resume = main_font.render("Resume", 1, (0, 47, 125))
-        WIN.blit(label_resume, ((WIDTH_H) - 60, 295))
+        WIN.blit(label_resume, (WIDTH_H - 60, 295))
 
         label_main_menu = main_font.render("Main menu", 1, (0, 47, 125))
-        WIN.blit(label_main_menu, ((WIDTH_H) - 90, 375))
+        WIN.blit(label_main_menu, (WIDTH_H - 90, 375))
 
         # Button Activations
         if click:
-            if button_resume.collidepoint((pos_x, pos_y)):
-                    run = False
-            if button_main_menu.collidepoint((pos_x, pos_y)):
-                    run = False
-                    main_menu()
+            if button_resume.collidepoint(pos_x, pos_y):
+                run = False
+            if button_main_menu.collidepoint(pos_x, pos_y):
+                run = False
+                main_menu()
 
         pygame.display.update()
         for event in pygame.event.get():
@@ -494,17 +489,12 @@ def main_menu():
         pos_x, pos_y = pygame.mouse.get_pos()
 
         # Menu Buttons
-        button_new_game = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) - 80, 260, 50)
-        button_change_ship = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H), 260, 50)
-        button_leave = pygame.Rect(
-            (WIDTH_H) - 130, (HEIGHT_H) + 80, 260, 50)
+        button_new_game = pygame.Rect(WIDTH_H - 130, HEIGHT_H - 80, 260, 50)
+        button_change_ship = pygame.Rect(WIDTH_H - 130, HEIGHT_H, 260, 50)
+        button_leave = pygame.Rect(WIDTH_H - 130, HEIGHT_H + 80, 260, 50)
 
-        button_music = pygame.Rect(
-            (WIDTH) - 150, 20, 50, 50)
-        button_sfx = pygame.Rect(
-            (WIDTH) - 80, 20, 50, 50)
+        button_music = pygame.Rect(WIDTH - 150, 20, 50, 50)
+        button_sfx = pygame.Rect(WIDTH - 80, 20, 50, 50)
         pygame.draw.rect(WIN, (204, 204, 204), button_new_game)
         pygame.draw.rect(WIN, (204, 204, 204), button_leave)
         pygame.draw.rect(WIN, (204, 204, 204), button_change_ship)
@@ -523,28 +513,26 @@ def main_menu():
 
         # Menu Icons
         if music_playing:
-            WIN.blit(MUSIC_ON, ((WIDTH_H) + 352, 25))
+            WIN.blit(MUSIC_ON, (WIDTH_H + 352, 25))
         else:
-            WIN.blit(MUSIC_OFF, ((WIDTH_H) + 352, 25))
+            WIN.blit(MUSIC_OFF, (WIDTH_H + 352, 25))
 
         if sfx_playing:
-            WIN.blit(SFX_ON, ((WIDTH_H) + 422, 21))
+            WIN.blit(SFX_ON, (WIDTH_H + 422, 21))
         else:
-            WIN.blit(SFX_OFF, ((WIDTH_H) + 422, 21))
-
+            WIN.blit(SFX_OFF, (WIDTH_H + 422, 21))
 
         # Button Activations
-        if button_new_game.collidepoint((pos_x, pos_y)):
+        if button_new_game.collidepoint(pos_x, pos_y):
             if click:
                 ship_type("classic")
-        if button_leave.collidepoint((pos_x, pos_y)):
+        if button_leave.collidepoint(pos_x, pos_y):
             if click:
                 break
-                quit()
-        if button_change_ship.collidepoint((pos_x, pos_y)):
+        if button_change_ship.collidepoint(pos_x, pos_y):
             if click:
                 change_ship_menu()
-        if button_music.collidepoint((pos_x, pos_y)):
+        if button_music.collidepoint(pos_x, pos_y):
             if click:
                 if music_playing:
                     music_off()
@@ -554,7 +542,7 @@ def main_menu():
                     music_playing = True
                 main_menu()
 
-        if button_sfx.collidepoint((pos_x, pos_y)):
+        if button_sfx.collidepoint(pos_x, pos_y):
             if click:
                 if sfx_playing:
                     sfx_playing = False
@@ -586,14 +574,10 @@ def change_ship_menu():
         pos_x, pos_y = pygame.mouse.get_pos()
 
         # Menu Buttons
-        button_classic = pygame.Rect(
-            (WIDTH_H) - 100, (HEIGHT_H) - 160, 200, 50)
-        button_heavy = pygame.Rect(
-            (WIDTH_H) - 100, (HEIGHT_H) - 80, 200, 50)
-        button_scout = pygame.Rect(
-            (WIDTH_H) - 100, (HEIGHT_H), 200, 50)
-        button_sniper = pygame.Rect(
-            (WIDTH_H) - 100, (HEIGHT_H) + 80, 200, 50)
+        button_classic = pygame.Rect(WIDTH_H - 100, HEIGHT_H - 160, 200, 50)
+        button_heavy = pygame.Rect(WIDTH_H - 100, HEIGHT_H - 80, 200, 50)
+        button_scout = pygame.Rect(WIDTH_H - 100, HEIGHT_H, 200, 50)
+        button_sniper = pygame.Rect(WIDTH_H - 100, HEIGHT_H + 80, 200, 50)
 
         pygame.draw.rect(WIN, (204, 204, 204), button_classic)
         pygame.draw.rect(WIN, (204, 204, 204), button_heavy)
@@ -611,13 +595,13 @@ def change_ship_menu():
         WIN.blit(label_sniper, (438, 455))
 
         if click:
-            if button_classic.collidepoint((pos_x, pos_y)):
+            if button_classic.collidepoint(pos_x, pos_y):
                 ship_type("classic")
-            if button_heavy.collidepoint((pos_x, pos_y)):
+            if button_heavy.collidepoint(pos_x, pos_y):
                 ship_type("heavy")
-            if button_scout.collidepoint((pos_x, pos_y)):
+            if button_scout.collidepoint(pos_x, pos_y):
                 ship_type("scout")
-            if button_sniper.collidepoint((pos_x, pos_y)):
+            if button_sniper.collidepoint(pos_x, pos_y):
                 ship_type("sniper")
 
         pygame.display.update()
@@ -636,7 +620,5 @@ def change_ship_menu():
 
 
 if __name__ == '__main__':
-    # music_playing = True
-    # sfx_playing = True
     music_on()
     main_menu()
