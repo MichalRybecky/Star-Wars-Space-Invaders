@@ -1,5 +1,8 @@
-# 15.4.2020
-# Star Wars PyGame, Space Invaders style
+"""
+Star Wars PyGame, Space Invaders style
+
+Main game file, run this file to start the game
+"""
 
 import time
 import random
@@ -7,6 +10,7 @@ import pygame
 from utils import database
 from utils.load_assets import *
 from utils.sound_control import *
+from utils.leaderboard import create_leaderboard
 
 
 WIDTH_H, HEIGHT_H = WIDTH // 2, HEIGHT // 2
@@ -18,6 +22,10 @@ main_font = pygame.font.Font("starjedi.ttf", 30)
 
 
 class Laser:
+    """
+    controls laser drawing, movement, collisions and all events
+    """
+
     def __init__(self, x, y, img):
         self.x = x
         self.y = y
@@ -31,13 +39,17 @@ class Laser:
         self.y += vel
 
     def off_screen(self, height):
-        return not (height >= self.y >= 0)
+        return not height >= self.y >= 0
 
     def collision(self, obj):
         return collide(self, obj)
 
 
 class PowerUP:
+    """
+    controls powerop drawing and type assigning
+    """
+
     def __init__(self, x, y, type):
         self.x = x
         self.y = y
@@ -58,6 +70,10 @@ class PowerUP:
 
 
 class Ship:
+    """
+    general ship class that controls ship events
+    """
+
     COOLDOWN = 30
 
     def __init__(self, x, y, health=100):
@@ -70,11 +86,17 @@ class Ship:
         self.cool_down_counter = 0
 
     def draw(self, window):
+        """
+        draws ship image and ship's lasers
+        """
         window.blit(self.ship_img, (self.x, self.y))
         for laser in self.lasers:
             laser.draw(window)
 
     def move_lasers(self, vel, obj):
+        """
+        moves ship lasers
+        """
         self.cooldown()
         for laser in self.lasers:
             laser.move(vel)
@@ -86,6 +108,9 @@ class Ship:
                 # TODO: add SFX of player ship hit
 
     def cooldown(self):
+        """
+        controls ships shoot cooldown
+        """
         if self.cool_down_counter >= self.COOLDOWN:
             self.cool_down_counter = 0
         elif self.cool_down_counter > 0:
@@ -99,6 +124,11 @@ class Ship:
 
 
 class Player(Ship):
+    """
+    inherits from general ship class,
+    this one has player specific properties like health bar
+    """
+
     def __init__(self, x, y, ship_class):
         super().__init__(x, y)
         self.laser_img = LASER_BLUE_MED
@@ -114,19 +144,25 @@ class Player(Ship):
         self.max_health = self.health
         self.mask = pygame.mask.from_surface(self.ship_img)
 
-    def get_player_health(self):
-        return self.health
-
     def player_regen(self):
+        """
+        regenerates player's health to full health
+        """
         self.health = self.max_health
 
     def cooldown(self):
+        """
+        player cooldown based on it's ship type
+        """
         if self.cool_down_counter >= self.laser_cooldown:
             self.cool_down_counter = 0
         elif self.cool_down_counter > 0:
             self.cool_down_counter += 1
 
     def move_lasers(self, vel, objs):
+        """
+        moving player's lasers basen on ship type and checking for collisions
+        """
         self.cooldown()
         for laser in self.lasers:
             laser.move(vel)
@@ -140,10 +176,16 @@ class Player(Ship):
                             self.lasers.remove(laser)
 
     def draw(self, window):
+        """
+        draws ship image (from general ship class) and players health bar
+        """
         super().draw(window)
         self.healthbar(window)
 
     def shoot(self):
+        """
+        gets laser position based on ship type and adds it to lasers list to be drawn
+        """
         if self.cool_down_counter == 0:
             lasers_pos = {
                 "classic": (self.x + 4, self.y + 30, self.x + 139, self.y + 30),
@@ -164,6 +206,9 @@ class Player(Ship):
                 SFX_PLAYER_FIRE.play()
 
     def healthbar(self, window):
+        """
+        draws players healthbar (green rect on top of red rect)
+        """
         if self.health >= 0:
             pygame.draw.rect(
                 window,
@@ -199,6 +244,11 @@ class Player(Ship):
 
 
 class Enemy(Ship):
+    """
+    inherits from general ship class,
+    has specific needs for movement speed or shooting
+    """
+
     COLOR_MAP = {
         "red": (CIS_FIGHTER, LASER_RED_SMALL),
         "green": (CIS_HYENA_BOMBER, LASER_RED_MED),
@@ -211,9 +261,15 @@ class Enemy(Ship):
         self.mask = pygame.mask.from_surface(self.ship_img)
 
     def move(self, vel):
+        """
+        method for enemy movement
+        """
         self.y += vel
 
     def shoot(self):
+        """
+        method for enemy shooting
+        """
         if self.y > 0:
             if self.cool_down_counter == 0:
                 laser = Laser(self.x + 13, self.y + 15, self.laser_img)
@@ -223,17 +279,20 @@ class Enemy(Ship):
                     SFX_ENEMY_FIRE.set_volume(0.3)
                     SFX_ENEMY_FIRE.play()
 
-    def get_y(self):
-        return self.y
-
 
 def collide(obj1, obj2):
+    """
+    returns boolean if two given objects have collided
+    """
     offset_x = obj2.x - obj1.x
     offset_y = obj2.y - obj1.y
     return obj1.mask.overlap(obj2.mask, (offset_x, offset_y)) is not None
 
 
 def ship_type(ship_class):
+    """
+    returns ship data based on the parameter
+    """
     ship_classes = {
         "classic": (5, 6, "classic"),
         "heavy": (3, 4, "heavy"),
@@ -244,9 +303,12 @@ def ship_type(ship_class):
 
 
 def main(p_v, p_l_v, ship_class):
+    """
+    main game function, controls the whole game
+    """
     player_sfx_played = False
     run = True
-    _FPS = 60
+    FPS = 60
     wave = 0
     lives = 5
     score = 0
@@ -274,14 +336,20 @@ def main(p_v, p_l_v, ship_class):
 
     start = time.time()
 
-    def enemies_on_screen():
+    def enemies_on_screen() -> int:
+        """
+        returns number of enemies currently on screen
+        """
         n_of_enemies_on_screen = 0
-        for e in enemies:
-            if e.get_y() > 0:
+        for enemy in enemies:
+            if enemy.y > 0:
                 n_of_enemies_on_screen += 1
         return int(n_of_enemies_on_screen)
 
     def redraw_window():
+        """
+        gets called every frame, redraws the game screen
+        """
         WIN.blit(BG, (0, 0))
 
         # Draw text
@@ -315,10 +383,10 @@ def main(p_v, p_l_v, ship_class):
         pygame.display.update()
 
     while run:
-        clock.tick(_FPS)
+        clock.tick(FPS)
         redraw_window()
         if not lost:
-            if s % _FPS == 0:
+            if s % FPS == 0:
                 score += 1
             s += 1
 
@@ -331,9 +399,9 @@ def main(p_v, p_l_v, ship_class):
                 player_sfx_played = True
 
         if lost:
-            if lost_count > _FPS * 3:
+            if lost_count > FPS * 3:
                 playtime = round(time.time() - start, 2)
-                database.add_game(score, wave, playtime)
+                database.add_game(score, wave, int(playtime))
                 run = False
             else:
                 continue
@@ -362,8 +430,8 @@ def main(p_v, p_l_v, ship_class):
                 if random.randrange(2) == 0:
                     avaible_pu_types = ["speed", "laser_speed"]
 
-                    if player.get_player_health() < 100 or lives < 5:
-                        if player.get_player_health() < 100:
+                    if player.health < 100 or lives < 5:
+                        if player.health < 100:
                             avaible_pu_types.append("health_player")
                         elif lives < 5:
                             avaible_pu_types.append("health_lives")
@@ -419,7 +487,7 @@ def main(p_v, p_l_v, ship_class):
                 freeze_active = 0
 
             if freeze_active == 0:
-                if random.randrange(0, 2 * _FPS) == 1:
+                if random.randrange(0, 2 * FPS) == 1:
                     enemy.shoot()
 
             if collide(enemy, player):
@@ -476,6 +544,9 @@ def settings_menu():
 
 
 def pause_menu():
+    """
+    creates and controls whole pause menu
+    """
     click = False
     run = True
 
@@ -519,6 +590,9 @@ def pause_menu():
 
 
 def main_menu():
+    """
+    creates and controls whole main menu
+    """
     global music_playing
     global sfx_playing
     run = True
@@ -606,6 +680,9 @@ def main_menu():
 
 
 def change_ship_menu():
+    """
+    creates and controls whole menu where you can change your ship type
+    """
     run = True
     click = False
     while run:
