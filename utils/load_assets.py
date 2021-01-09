@@ -1,5 +1,9 @@
-import pygame
+"""
+Module for loading all assets from assets file
+"""
+
 import os
+import pygame
 
 WIDTH, HEIGHT = 1000, 750
 
