@@ -20,8 +20,8 @@ def music_on():
         0: ["force_theme.mp3", 1],
         1: ["anakins_betrayal.mp3", 1],
         2: ["battle_of_the_heroes.mp3", 5],
-        3: ["duel of the fates.mp3", 0.6],
-        4: ["]jedi_temple_march.mp3", 1],
+        3: ["duel_of_the_fates.mp3", 0.6],
+        4: ["jedi_temple_march.mp3", 1],
     }
 
     SELECTED_SONG = songs[random.randrange(4)]
